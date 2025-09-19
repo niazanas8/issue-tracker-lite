@@ -52,20 +52,19 @@ const Loading = () => {
                             : "Loading..."}
                     </h1>
                     <br />
-                    {complete10Seconds && <p>This Could Take Up to 1 minute</p>}
-                    <br />
                     {complete20Seconds && (
                         <p>
                             While waiting, feel free to view my other projects{" "}
                             <a
-                                target={"_blank"}
-                                href="https://kenyokohama.com/"
+                                target="_blank"
+                                href="https://github.com/niazanas8"
                                 rel="noreferrer"
                             >
                                 here
                             </a>
                         </p>
                     )}
+
                     <br />
                     {complete1Minute && (
                         <button onClick={handleRefresh}>Refresh Page</button>

@@ -7,9 +7,9 @@ Full Stack Software Bug Tracking System using MongoDB, Express, React and NodeJS
 This Bug Tracking System is a full-stack software issue management web application that allows developers to create tickets for their projects and admins to manage the progress of each project using NodeJS & Express in the back end, MongoDB as the database and React in the front end
 
 ### Links:
-- [Live Preview](https://ken-yokohama.github.io/Bug-Tracking-System)
+- [Live Preview](/)
 
-![Bug Tracker Sample](https://github.com/Ken-Yokohama/Bug-Tracking-System/blob/master/cover.JPG?raw=true)
+![Bug Tracker Sample](/)
 
 ### Features:
 - User Authentication and Password Encryption using Bcrypt
@@ -40,13 +40,13 @@ This Bug Tracking System is a full-stack software issue management web applicati
 
 ### How to run client locally
   1. After cloning the repository... Navigate to the Client directory and Install the dependencies in the package.json using `npm i`
-  2. Add the environment variables found in [here](https://github.com/Ken-Yokohama/environment-variables) to your .env.development.local file at the root of the Client directory
+  2. Add the environment variables found in [here](/) to your .env.development.local file at the root of the Client directory
   3. Start the app using the script `npm start`
   4. Note: Root of page is http://localhost:3000/Bug-Tracking-System
   
 ### How to run server locally
   1. After cloning the repository... Navigate to the Client directory and Install the dependencies in the package.json using `npm i`
-  2. Add the environment variables found in [here](https://github.com/Ken-Yokohama/environment-variables) to your .env file at the root of the Client directory
+  2. Add the environment variables found in [here](/) to your .env file at the root of the Client directory
   3. Start the server using the script `npm run server`
 
 ### Deploying the Client & Server
