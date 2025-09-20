@@ -97,6 +97,7 @@ npm start
 Visit: http://localhost:3000/issue-tracker-lite/
 ---
 ##🚀 Deploy
+---
 Backend (Render)
 Root Directory: Server
 
@@ -131,7 +132,9 @@ REACT_APP_LOCAL_API_URL=https://issue-tracker-lite-1.onrender.com
 Base path: App uses basename="/issue-tracker-lite" in index.tsx.
 Ensure your links respect that base path.
 
+---
 ##🔌 API Endpoints (selection)
+---
 Auth
 
 POST /register { email, password }
@@ -176,15 +179,17 @@ makefile
 Copy code
 x-access-token: <token>
 email: <user email>
-
+---
 ##🌓 Theme Toggle
+---
 Client/src/theme/AppThemeProvider.tsx provides ColorModeContext & MUI theme.
 
 Client/src/components/Header.tsx includes a brightness icon button to toggle modes.
 
 Preference is stored in localStorage (prefers-color).
-
+---
 ##🧭 Scripts
+---
 Client
 npm start – dev server
 npm run build – production build
@@ -193,17 +198,22 @@ npm test – (if configured)
 Server
 npm run dev – nodemon
 npm start – node
-
+---
 ##🧩 Notes & Tips
+---
 If the frontend shows a loading screen for a long time:
   Ensure the API URL in REACT_APP_LOCAL_API_URL is reachable (CORS OK) and /pingServer returns text.
 If Render root says “Cannot GET /”:
   Your service might be pointed to the repo root. Set Root Directory to Server or start with node Server/index.js.
 If Mongo cannot connect on Render:
   Double-check MONGO_URI and your Atlas IP allow list.
-
+---
 ##📜 License
+---
 MIT © Anas Niaz
+---
 
 ##🙌 Acknowledgements
+---
 Inspired by classic MERN bug trackers; rebuilt and customized with TypeScript, MUI, and theme switching.
+---
