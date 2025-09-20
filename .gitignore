@@ -5,3 +5,10 @@ dist/
 Client/node_modules/
 Server/node_modules/
 
+node_modules/
+build/
+dist/
+**/.env
+Client/node_modules/
+Server/node_modules/
+
