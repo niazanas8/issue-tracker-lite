@@ -1,35 +1,40 @@
-# Issue Tracker Lite
+# 🐞 Issue Tracker Lite
 
 ![Bug Tracker Cover](https://www.softwaresuggest.com/blog/wp-content/uploads/2019/08/s-blog-3-01.jpg)
 
 A full-stack bug/issue tracking app built with **MongoDB + Express + React + Node.js (MERN)**.  
 Create projects, file tickets, assign devs, track status, and comment — now with **light/dark mode** and a simple **admin ban** tool.
+
 ---
-> Live Frontend:https://issue-tracker-lite-weld.vercel.app/
-> Live API: https://issue-tracker-lite-1.onrender.com
+
+### 🌐 Live
+- **Frontend (Vercel):** [Issue Tracker Lite](https://issue-tracker-lite-weld.vercel.app/)  
+- **Backend (Render API):** [Issue Tracker API](https://issue-tracker-lite-1.onrender.com)
+
 ---
+
 ## ✨ Features
 
 - 🔐 JWT auth (register/login), bcrypt password hashing
-- 👥 Role support (admin/developer) with protected routes
-- 🧾 Projects & Tickets (priority, status, type, ETA, assigned devs)
+- 👥 Role-based routes (admin/developer)
+- 🧾 Projects & tickets (priority, status, type, ETA, assigned devs)
 - 💬 Ticket comments
 - 📊 Dashboard: recent activity, ticket distribution, project performance
-- 🌗 **Light/Dark theme** (MUI) with persistent preference
+- 🌗 **Light/Dark theme** with persistent preference
 - 🛡️ Admin: ban abusive IPs
 - 🧰 Redux Toolkit global state
-- 📱 Responsive UI (Material UI)
-- 🧪 TypeScript on the client
+- 📱 Responsive UI (Material UI + Flex/Grid)
+- 🧪 TypeScript client
 
 ---
 
-## 🗂️ Monorepo Structure
+## 🗂️ Project Structure
 
 .
 ├── Client/ # React + TS + Redux + MUI
 │ ├── public/
 │ └── src/
-│ ├── components/ # Header, menus, user profile, etc.
+│ ├── components/ # Header, menus, profile, etc.
 │ ├── containers/ # Main layout
 │ ├── features/ # Redux slices
 │ ├── pages/ # Login, Dashboard, Tickets, Admin
@@ -39,8 +44,8 @@ Create projects, file tickets, assign devs, track status, and comment — now wi
 └── Server/ # Express + Mongoose API
 ├── models/ # Users, Projects, Tickets, BannedIP
 ├── .env # server env vars (not committed)
-└── index.js # API routes and startup
-
+└── index.js # API routes & startup
+---
 
 ---
 
@@ -75,27 +80,23 @@ REACT_APP_LOCAL_API_URL=http://localhost:3001/
 ## 🧪 Run Locally
 
 ### 1) Start the API
-```bash
 cd Server
 npm install
 npm run dev       # nodemon index.js
 # or
 npm start         # node index.js
 Visit: http://localhost:3001/ → should show “Issue Tracker API ✅”
-
 Health: http://localhost:3001/health
-
 Ping: http://localhost:3001/pingServer
 
 2) Start the Client
-bash
 Copy code
 cd Client
 npm install
 npm start
 Visit: http://localhost:3000/issue-tracker-lite/
-
-🚀 Deploy
+---
+##🚀 Deploy
 Backend (Render)
 Root Directory: Server
 
@@ -130,7 +131,7 @@ REACT_APP_LOCAL_API_URL=https://issue-tracker-lite-1.onrender.com
 Base path: App uses basename="/issue-tracker-lite" in index.tsx.
 Ensure your links respect that base path.
 
-🔌 API Endpoints (selection)
+##🔌 API Endpoints (selection)
 Auth
 
 POST /register { email, password }
@@ -176,14 +177,14 @@ Copy code
 x-access-token: <token>
 email: <user email>
 
-🌓 Theme Toggle
+##🌓 Theme Toggle
 Client/src/theme/AppThemeProvider.tsx provides ColorModeContext & MUI theme.
 
 Client/src/components/Header.tsx includes a brightness icon button to toggle modes.
 
 Preference is stored in localStorage (prefers-color).
 
-🧭 Scripts
+##🧭 Scripts
 Client
 npm start – dev server
 npm run build – production build
@@ -193,7 +194,7 @@ Server
 npm run dev – nodemon
 npm start – node
 
-🧩 Notes & Tips
+##🧩 Notes & Tips
 If the frontend shows a loading screen for a long time:
   Ensure the API URL in REACT_APP_LOCAL_API_URL is reachable (CORS OK) and /pingServer returns text.
 If Render root says “Cannot GET /”:
@@ -201,8 +202,8 @@ If Render root says “Cannot GET /”:
 If Mongo cannot connect on Render:
   Double-check MONGO_URI and your Atlas IP allow list.
 
-📜 License
+##📜 License
 MIT © Anas Niaz
 
-🙌 Acknowledgements
+##🙌 Acknowledgements
 Inspired by classic MERN bug trackers; rebuilt and customized with TypeScript, MUI, and theme switching.
