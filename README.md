@@ -25,6 +25,23 @@ Developers can create tickets for projects, admins can manage progress, and ever
 - 📱 Fully responsive design (Flexbox + Grid)
 
 ---
+## 📸 Screenshots
+
+### Dashboard (Light Mode)
+![Dashboard Light](./screenshots/dashboard-light.png)
+
+### Dashboard (Dark Mode)
+![Dashboard Dark](./screenshots/dashboard-dark.png)
+
+### Projects Page
+![Projects](./screenshots/projects.png)
+
+### Tickets Page
+![Tickets](./screenshots/tickets.png)
+
+### Admin Page
+![Admin](./screenshots/admin.png)
+---
 
 ## 🛠️ Technologies Used
 | Technology         | Usage                                |
