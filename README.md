@@ -4,10 +4,6 @@
 
 A full-stack bug/issue tracking app built with **MongoDB + Express + React + Node.js (MERN)**.  
 Create projects, file tickets, assign devs, track status, and comment — now with **light/dark mode** and a simple **admin ban** tool.
-
-> Live Frontend: _add your Vercel URL_  
-> Live API: _add your Render URL_
-
 ---
 > Live Frontend:https://issue-tracker-lite-weld.vercel.app/
 > Live API: https://issue-tracker-lite-1.onrender.com
