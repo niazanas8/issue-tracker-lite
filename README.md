@@ -43,10 +43,12 @@ Developers can create tickets for projects, admins can manage progress, and ever
 
 ---
 
-## ⚙️ Running Locally
+### How to run server locally
+  1. After cloning the repository... Navigate to the Client directory and Install the dependencies in the package.json using `npm i`
+  2. Add the environment variables found in [here](/) to your .env file at the root of the Client directory
+  3. Start the server using the script `npm run server`
 
-### Run the Client
-1. Clone the repo and navigate to `Client/`.
-2. Install dependencies:
-   ```bash
-   npm install
+### Deploying the Client & Server
+  - Deploy the client by navigating to the client directory and use the script `npm run deploy`
+  - Server is automatically re-deployed when pushing a change on the Server directory
+
