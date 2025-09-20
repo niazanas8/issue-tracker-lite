@@ -4,31 +4,37 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const mongoose = require("mongoose");   // only once
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 const ip = require("ip");
 
-// Middleware
+// ---------- Middleware ----------
 app.use(express.json());
-app.use(cors());
+
+// Allow requests from anywhere by default (or set FRONTEND_ORIGIN in Render)
+app.use(
+  cors({
+    origin: process.env.FRONTEND_ORIGIN || "*",
+  })
+);
 app.set("trust proxy", true);
 
-// Models
+// ---------- Models ----------
 const UsersModel = require("./models/UsersSchema");
 const ProjectsModel = require("./models/ProjectsSchema");
 const TicketsModel = require("./models/TicketsSchema");
 const BannedIPsModel = require("./models/BannedIPSchema");
 
-// MongoDB connection
+// ---------- MongoDB connection ----------
 const MONGO_URL =
   process.env.MONGO_URI ||
   process.env.MONGODB_URI ||
-  process.env.MONGODBURI;   // some repos use this name
+  process.env.MONGODBURI;
 
 if (!MONGO_URL) {
-  console.error("❌ No Mongo URL found. Check your .env file in Server/");
+  console.error("❌ No Mongo URL found. Check your .env in /Server");
   process.exit(1);
 }
 
@@ -40,19 +46,49 @@ mongoose
     process.exit(1);
   });
 
-// Rate limiter for register
+// ---------- Rate limiters ----------
 const registerLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 Hour
+  windowMs: 60 * 60 * 1000, // 1 hour
   max: 5,
   message: "Too many accounts created, please try again after an hour",
 });
 
-// ---------------- AUTH ROUTES ----------------
+const createProjectLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000, // 30 mins
+  max: 5,
+  message: "Too many projects created, please wait 30 minutes",
+});
 
+const createTicketLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000, // 30 mins
+  max: 10,
+  message: "Too many tickets created, please wait 30 minutes",
+});
+
+// ---------- Root & health ----------
+app.get("/", (_req, res) => {
+  res.type("text/html").send(
+    `<h1>Issue Tracker API ✅</h1>
+     <p>Try: <a href="/pingServer">/pingServer</a> or <a href="/health">/health</a></p>`
+  );
+});
+
+app.get("/health", (_req, res) => {
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  const mongoState = states[mongoose.connection.readyState] || "unknown";
+  res.json({
+    ok: true,
+    uptime: process.uptime(),
+    mongo: mongoState,
+    env: process.env.NODE_ENV || "development",
+  });
+});
+
+// ---------- Auth ----------
 app.post("/register", registerLimiter, async (req, res) => {
   const { email, password } = req.body;
-  const sanitizedEmail = email.toLowerCase();
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const sanitizedEmail = String(email || "").toLowerCase();
+  const hashedPassword = await bcrypt.hash(String(password || ""), 10);
   const clientIp =
     req.ip ||
     (req.headers["x-forwarded-for"] || "").split(",")[0] ||
@@ -63,7 +99,7 @@ app.post("/register", registerLimiter, async (req, res) => {
     return res.status(409).send("User Already Registered, Please Login");
   }
 
-  console.log(`Registering new user - ${email}`);
+  console.log(`Registering new user - ${sanitizedEmail}`);
   const today = new Date().toLocaleString();
 
   const user = {
@@ -84,43 +120,41 @@ app.post("/register", registerLimiter, async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const sanitizedEmail = email.toLowerCase();
+  const sanitizedEmail = String(email || "").toLowerCase();
 
   const user = await UsersModel.findOne({ email: sanitizedEmail });
   if (!user) return res.status(400).send("Invalid Credentials");
 
-  const correctPassword = await bcrypt.compare(password, user.password);
+  const correctPassword = await bcrypt.compare(String(password || ""), user.password);
   if (!correctPassword) return res.status(400).send("Invalid Credentials");
 
-  console.log(`Logging In - ${email}`);
+  console.log(`Logging In - ${sanitizedEmail}`);
   const token = jwt.sign(user.toJSON(), process.env.JWTSECRET, {
     expiresIn: "24h",
   });
   res.status(201).json({ token, email: sanitizedEmail });
 });
 
-// ---------------- JWT VERIFY MIDDLEWARE ----------------
-
+// ---------- JWT middleware ----------
 const verifyJWT = (req, res, next) => {
   const token = req.headers["x-access-token"];
-  if (!token) return res.send("No Token Found!");
+  if (!token) return res.status(401).send("No Token Found!");
 
   jwt.verify(token, process.env.JWTSECRET, (err, decodedUser) => {
     if (err) {
-      return res.json({ auth: false, message: "Failed to authenticate" });
+      return res.status(401).json({ auth: false, message: "Failed to authenticate" });
     }
     req.userId = decodedUser;
     next();
   });
 };
 
-// ---------------- ROUTES ----------------
-
-app.get("/isUserAuth", verifyJWT, (req, res) => {
+// ---------- Utility routes ----------
+app.get("/isUserAuth", verifyJWT, (_req, res) => {
   res.send("You are authenticated!");
 });
 
-app.get("/pingServer", (req, res) => {
+app.get("/pingServer", (_req, res) => {
   res.send("Server Is Up!");
 });
 
@@ -138,13 +172,7 @@ app.get("/userSecurity", async (req, res) => {
   res.status(201).send("Valid Credentials");
 });
 
-// Projects
-const createProjectLimiter = rateLimit({
-  windowMs: 30 * 60 * 1000,
-  max: 5,
-  message: "Too many projects created, please wait 30 minutes",
-});
-
+// ---------- Projects ----------
 app.post("/createProject", verifyJWT, createProjectLimiter, (req, res) => {
   const project = {
     title: req.body.title,
@@ -156,7 +184,7 @@ app.post("/createProject", verifyJWT, createProjectLimiter, (req, res) => {
   );
 });
 
-app.get("/getAllProjects", verifyJWT, (req, res) => {
+app.get("/getAllProjects", verifyJWT, (_req, res) => {
   ProjectsModel.find({}, (err, docs) => {
     if (err) return res.status(500).send(err);
     if (docs.length === 0) return res.json("No Documents Found");
@@ -164,13 +192,7 @@ app.get("/getAllProjects", verifyJWT, (req, res) => {
   });
 });
 
-// Tickets
-const createTicketLimiter = rateLimit({
-  windowMs: 30 * 60 * 1000,
-  max: 10,
-  message: "Too many tickets created, please wait 30 minutes",
-});
-
+// ---------- Tickets ----------
 app.post("/createTicket", verifyJWT, createTicketLimiter, (req, res) => {
   const ticket = {
     title: req.body.title,
@@ -189,7 +211,7 @@ app.post("/createTicket", verifyJWT, createTicketLimiter, (req, res) => {
   );
 });
 
-app.get("/getAllTickets", verifyJWT, (req, res) => {
+app.get("/getAllTickets", verifyJWT, (_req, res) => {
   TicketsModel.find({}, (err, docs) => {
     if (err) return res.status(500).send(err);
     if (docs.length === 0) return res.json("No Documents Found");
@@ -237,9 +259,9 @@ app.post("/addComment", verifyJWT, (req, res) => {
   );
 });
 
-// Admin: get users, ban user
-app.get("/getUsers", verifyJWT, (req, res) => {
-  if (req.userId.role !== "admin") {
+// ---------- Admin ----------
+app.get("/getUsers", verifyJWT, (_req, res) => {
+  if (_req.userId.role !== "admin") {
     return res.json("Not Admin");
   }
   UsersModel.find({}, (err, docs) => {
@@ -252,24 +274,24 @@ app.post("/banUser", verifyJWT, (req, res) => {
   if (req.userId.role !== "admin") {
     return res.json("Not Admin");
   }
-  const { ip } = req.body;
-  BannedIPsModel.create({ ip }).then(() =>
+  const { ip: ipToBan } = req.body;
+  BannedIPsModel.create({ ip: ipToBan }).then(() =>
     res.json("Succesfully Banned User")
   );
 });
 
-// ---------------- START SERVER ----------------
-// Health check
-app.get("/health", (_req, res) => {
-  const mongoState = ["disconnected","connected","connecting","disconnecting"][mongoose.connection.readyState] || "unknown";
-  res.json({
-    ok: true,
-    uptime: process.uptime(),
-    mongo: mongoState,
-    env: process.env.NODE_ENV || "development",
-  });
+// ---------- 404 & error handlers ----------
+app.use((req, res) => {
+  res.status(404).json({ ok: false, message: "Route not found" });
 });
 
-app.listen(process.env.PORT || 3001, () => {
-  console.log("App listening on port " + (process.env.PORT || "3001") + "!");
+app.use((err, _req, res, _next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({ ok: false, message: "Server error" });
+});
+
+// ---------- Start ----------
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}!`);
 });
