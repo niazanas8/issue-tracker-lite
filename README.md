@@ -97,7 +97,7 @@ npm start
 Visit: http://localhost:3000/issue-tracker-lite/
 ---
 🚀 Deploy
----
+
 Backend (Render)
 Root Directory: Server
 
