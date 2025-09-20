@@ -29,8 +29,7 @@ Create projects, file tickets, assign devs, track status, and comment — now wi
 ---
 
 ## 🗂️ Project Structure
-
-.
+---
 ├── Client/ # React + TS + Redux + MUI
 │ ├── public/
 │ └── src/
@@ -45,8 +44,6 @@ Create projects, file tickets, assign devs, track status, and comment — now wi
 ├── models/ # Users, Projects, Tickets, BannedIP
 ├── .env # server env vars (not committed)
 └── index.js # API routes & startup
----
-
 ---
 
 ## ⚙️ Prerequisites
@@ -97,12 +94,10 @@ npm start
 Visit: http://localhost:3000/issue-tracker-lite/
 ---
 🚀 Deploy
-
-Backend (Render)
+---
+###Backend (Render)
 Root Directory: Server
-
 Build Command: npm install
-
 Start Command: node index.js
 
 Environment (Render dashboard → Environment):
