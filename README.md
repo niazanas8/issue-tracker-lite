@@ -96,7 +96,7 @@ npm install
 npm start
 Visit: http://localhost:3000/issue-tracker-lite/
 ---
-##🚀 Deploy
+🚀 Deploy
 ---
 Backend (Render)
 Root Directory: Server
@@ -133,7 +133,7 @@ Base path: App uses basename="/issue-tracker-lite" in index.tsx.
 Ensure your links respect that base path.
 
 ---
-##🔌 API Endpoints (selection)
+🔌 API Endpoints (selection)
 ---
 Auth
 
@@ -180,7 +180,7 @@ Copy code
 x-access-token: <token>
 email: <user email>
 ---
-##🌓 Theme Toggle
+🌓 Theme Toggle
 ---
 Client/src/theme/AppThemeProvider.tsx provides ColorModeContext & MUI theme.
 
@@ -188,7 +188,7 @@ Client/src/components/Header.tsx includes a brightness icon button to toggle mod
 
 Preference is stored in localStorage (prefers-color).
 ---
-##🧭 Scripts
+🧭 Scripts
 ---
 Client
 npm start – dev server
@@ -199,7 +199,7 @@ Server
 npm run dev – nodemon
 npm start – node
 ---
-##🧩 Notes & Tips
+🧩 Notes & Tips
 ---
 If the frontend shows a loading screen for a long time:
   Ensure the API URL in REACT_APP_LOCAL_API_URL is reachable (CORS OK) and /pingServer returns text.
@@ -208,12 +208,12 @@ If Render root says “Cannot GET /”:
 If Mongo cannot connect on Render:
   Double-check MONGO_URI and your Atlas IP allow list.
 ---
-##📜 License
+📜 License
 ---
 MIT © Anas Niaz
 ---
 
-##🙌 Acknowledgements
+🙌 Acknowledgements
 ---
 Inspired by classic MERN bug trackers; rebuilt and customized with TypeScript, MUI, and theme switching.
 ---
